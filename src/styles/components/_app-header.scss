@@ -1,0 +1,13 @@
+.app-header {
+  display: flex;
+  width: 100%;
+  background-color: #fff;
+  border-bottom: 1px solid #edeff1;
+  height: 47px;
+  // position: fixed;
+  .logo {
+    margin-top: 5px;
+    margin-left: 16px;
+    width: 77%;
+  }
+}

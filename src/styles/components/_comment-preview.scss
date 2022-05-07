@@ -1,0 +1,130 @@
+.comment-preview {
+  position: relative;
+  margin-bottom: 10px;
+  h1,
+  p {
+    font-family: Noto Sans, Arial, sans-serif;
+    font-size: large;
+    color: #373737; //#707070 , #474747 ,#373737, #1A1A1B
+  }
+  .comment {
+    display: flex;
+    flex-direction: column;
+    .info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      .time {
+        color: #bfbfbf;
+      }
+      .user-name {
+        &:hover {
+          cursor: pointer;
+          text-decoration: underline;
+        }
+        color: #1a1a1b; //#252526, #1a1a1b
+      }
+    }
+
+    .line-container {
+      &:hover {
+        .line {
+          border-right: 2px solid salmon;
+        }
+      }
+      bottom: 0;
+      position: absolute;
+      height: calc(100% - 50px);
+      cursor: pointer;
+      margin-left: 8px;
+      width: 16px;
+
+      .line {
+        border-right: 2px solid #edeff1;
+        display: block;
+        height: 100%;
+        width: 50%;
+        // &:hover {
+        //   border-right: 2px solid salmon;
+        // }
+      }
+    }
+    // .comment-body {
+    //   margin-left: 44px;
+    //   margin-bottom: 10px;
+    // }
+    // .comment-reply {
+    //   margin-left: 44px;
+    //   margin-bottom: 10px;
+    // }
+  }
+
+  .profile-pic {
+    height: 35px;
+    width: 35px;
+    border-radius: 50px;
+
+    background-color: #edeff1; //aqua;
+    img {
+      width: 100%;
+      transform-origin: bottom center;
+      display: block;
+      transform: scale(1.3);
+    }
+  }
+  .inner-container {
+    margin-left: 44px;
+    margin-bottom: 10px;
+  }
+
+  .input-test-pre[type='text'] {
+    width: 250px;
+    padding: 8px 14px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: 1px solid #e9eaeb;
+    // -webkit-transition: 0.5s;
+    transition: 0.5s;
+    background: #fff;
+    outline: none;
+    border-radius: 10px;
+    font-size: 18px;
+  }
+
+  .input-test-pre[type='text']:focus {
+    border: 1px solid #555;
+  }
+
+  .btn-pre {
+    // border-radius: 50px;
+    // padding: 6px 14px;
+    padding: 11px 20px;
+    margin: 8px 4px;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+  .btn-white-pre {
+    border: 1px solid #499fe0;
+    color: #0079d3;
+    &:hover {
+      background-color: #f5fafd;
+    }
+  }
+  .btn-orange-pre {
+    background-color: #ff4500;
+    color: #ffffff;
+    border: none;
+    border-radius: 50px;
+    &:hover {
+      background-color: #ff5414;
+    }
+  }
+  .btn-blue-pre {
+    border: 1px solid #0079d3;
+    color: #ffffff;
+    background-color: #0079d3;
+    &:hover {
+      background-color: #1484d6;
+    }
+  }
+}
