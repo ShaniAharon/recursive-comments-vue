@@ -1,33 +1,25 @@
-import {storageService} from './async-storage.service.js'
-import {utilService} from './util.service.js'
+import { storageService } from './async-storage.service.js'
+import { utilService } from './util.service.js'
 
 const KEY = 'commentDB'
 var gItemsTree
-;(() => {
-  gItemsTree = getInitialItemTree()
-  // _toggleNodesParent()
-  _createComments()
-})()
+  ; (() => {
+    gItemsTree = getInitialItemTree()
+    _createComments()
+  })()
 
 window.test = {
   addItem,
-  getLeafCount,
   getItem,
-  _toggleNodesParent,
   getInitialItemTree,
-  subCommentsDeepCount,
-  nestedLoop,
   goDeep,
 }
 
 export const itemService = {
   addItem,
-  getLeafCount,
   updateComment,
   addComment,
-  subCommentsCount,
   getInitialItemTree,
-  flatIt,
   query,
   getById,
   save,
@@ -39,32 +31,6 @@ export const itemService = {
 async function getItem(id) {
   const foundItem = await getById(id)
   return foundItem
-}
-
-//add or remove parent node prop to all the childs
-function _toggleNodesParent(shouldSetParent = true) {
-  //no need for all this stuff restore it to the original logic
-  const withs = []
-  function setParentPropToNode(parentNode) {
-    if (!parentNode._id) parentNode._id = Math.random().toString().slice(2, 9)
-
-    for (let i = 0; i < parentNode.children.length; i++) {
-      const child = parentNode.children[i]
-      if (!withs.includes(child.key)) {
-        if (!parentNode._id) {
-          // parentNode._id = Math.random().toString().slice(2, 9)
-        }
-
-        if (shouldSetParent) {
-          child.parent = parentNode._id
-          child.parentKey = parentNode.key
-        } else delete child.parent
-        withs.push(child.key)
-      }
-      setParentPropToNode(child)
-    }
-  }
-  _traverse(gItemsTree, setParentPropToNode)
 }
 
 function _traverse(node, visitFn) {
@@ -83,27 +49,6 @@ function addItem(key, item) {
   _traverse(gItemsTree, isKeyFound)
 }
 
-function getLeafCount() {
-  let c = 0
-  let p = 0
-  function count(node) {
-    // if (node === null) return 0
-
-    if (!node.children.length) {
-      c++
-      if (node.picked) p++
-      // return 1
-    }
-  }
-  _traverse(gItemsTree, count)
-
-  // setTimeout(() => {
-  //   _traverse(gItemsTree, count)
-
-  //
-  //
-  // }, 2000)
-}
 
 function updateComment(key, txt) {
   let item = getItem(key)
@@ -111,8 +56,8 @@ function updateComment(key, txt) {
 }
 
 async function addComment(id, txt) {
-  if (!txt) return // plaster try without it, because the recursion cmp preview fire 3 times
-  let item = await getItem(id) //change ger item to work with local storage data
+  if (!txt) return
+  let item = await getItem(id)
   const comment = {
     key: txt,
     picked: false,
@@ -124,7 +69,7 @@ async function addComment(id, txt) {
     _id: Math.random().toString().slice(2, 9),
   }
   item.children.push(comment)
-  return save(item, comment) // it overwrite the rest of the tree fix it
+  return save(item, comment)
 }
 
 async function addCommentToRoot(txt) {
@@ -137,46 +82,25 @@ async function addCommentToRoot(txt) {
     imgUrl: utilService.generateRandomImg(),
     children: [],
   }
-  // localStorage.setItem(KEY, JSON.stringify(await query()))
-  // debugger
-  return save(comment) // it overwrite the rest of the tree fix it
-  // const cms = await query()
-  // storageService.put(KEY, {...item})
-  // const updated = await save(structuredClone(item))
-  // item.picked = true // can disable the input after comment
-  //
+  return save(comment)
 }
 
-//count the number of direct childs, sub comments
-function subCommentsCount(key) {
-  let item = getItem(key)
-  return item.children.length
-}
-
-//count the number of all the childs, sub comments
-function subCommentsDeepCount(key) {
-  let item = getItem(key)
-  let count = 0
-  function countChilds(node) {
-    count += node.children.length
-  }
-  _traverse(item, countChilds)
-  return count
-}
-
-//go into each node and flat all the children into one array
+//go into each node and add id , return an array with main childs soo we can run on it
 function goDeep() {
   const res = []
   const gTree = gItemsTree //getInitialItemTree()
   function inside(item) {
     item._id = Math.random().toString().slice(2, 9)
+    //check maybe no need for this
     if (item.children.length && !res.includes(item)) {
       res.push(...item.children)
     }
   }
   _traverse(gTree, inside)
-
-  return [...new Set(res)].slice(0, 2) //Plaster try without the slice , you got 4 items 2 vegpuki1 vegmuki1
+  // console.log(gTree.children);
+  // console.log('test', [...new Set(res)].slice(0, 2));
+  return gTree.children
+  // return [...new Set(res)].slice(0, 2) //Plaster try without the slice , you got 4 items 2 vegpuki1 vegmuki1
 }
 
 function getInitialItemTree() {
@@ -294,68 +218,4 @@ function save(item, comment) {
 
 window.gItemsTree = gItemsTree
 
-//test flatten to array with objs
-function flatIt() {
-  const comments = []
-  const gTree = getInitialItemTree()
-  function flatChildren(node) {
-    node._id = Math.random().toString().slice(2, 9)
 
-    if (node.children.length) {
-      comments.push(...flatten(node.children))
-    }
-  }
-  _traverse(gTree, flatChildren)
-  //
-  return [...new Set(comments)]
-}
-
-function flatten(values) {
-  return values.reduce(
-    (acc, val) => acc.concat(Array.isArray(val) ? flatten(val) : val),
-    []
-  )
-}
-
-function nestedLoop(obj) {
-  const res = []
-  function recurse(obj, current) {
-    for (const key in obj) {
-      let value = obj[key]
-      if (value != undefined) {
-        if (Array.isArray(value)) {
-          res.push(...value)
-          recurse(value)
-          // value.map((item) => {
-          //   item.id = utilService.makeId()
-        }
-      } else if (value && typeof value === 'object') {
-        recurse(value, key)
-      } else {
-        // Do your stuff here to var value
-        // res[key] = value
-        res.push(value)
-      }
-    }
-  }
-  recurse(obj)
-
-  return res
-}
-
-function simpleStringify(object) {
-  var simpleObject = {}
-  for (var prop in object) {
-    if (!object.hasOwnProperty(prop)) {
-      continue
-    }
-    if (typeof object[prop] == 'object') {
-      continue
-    }
-    if (typeof object[prop] == 'function') {
-      continue
-    }
-    simpleObject[prop] = object[prop]
-  }
-  return JSON.parse(JSON.stringify(simpleObject)) // returns cleaned up JSON
-}

@@ -21,10 +21,10 @@ function debounce(func, timeout = 300) {
 function getRandomInt(min, max) {
   min = Math.ceil(min)
   max = Math.floor(max)
-  return Math.floor(Math.random() * (max - min + 1)) + min //The maximum is inclusive and the minimum is inclusive
+  return Math.floor(Math.random() * (max - min + 1)) + min
 }
 
-window.try = {generateRandomName}
+window.try = { generateRandomName }
 
 function generateRandomName() {
   const names = [
@@ -46,7 +46,7 @@ function generateRandomName() {
   const famName = [
     'star',
     'kamikaza',
-    'kaka',
+    'family',
     'eat',
     'some',
     'banana',
@@ -58,6 +58,8 @@ function generateRandomName() {
     'car',
     'wing',
     'yang',
+    'snow',
+    'fire'
   ]
   return (
     names[Math.floor(Math.random() * names.length)] +
@@ -67,7 +69,8 @@ function generateRandomName() {
 }
 
 function generateRandomImg() {
-  return 'pro' + Math.floor(Math.random() * 11 + 1) + '.png'
+  //try to get diff im g every time
+  return 'pro' + Math.floor(Math.random() * 17 + 1) + '.png'
 }
 
 function timeAgo(input) {

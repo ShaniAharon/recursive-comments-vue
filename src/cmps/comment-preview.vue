@@ -94,9 +94,6 @@
         const {children} = this.comment
         return children && children.length > 0
       },
-      RandomUserName() {
-        return utilService.generateRandomName()
-      },
       formatTime() {
         const time = utilService.timeAgo(this.comment.createdAt)
         return time ? time : 'Just now'
